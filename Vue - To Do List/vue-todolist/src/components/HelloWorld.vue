@@ -4,13 +4,13 @@
     <div class="holder">
       <form @submit.prevent="addSkill">
         <input type="text" placeholder="Enter a skill you have..." v-model="skill" v-validate="'min:5'" name="skill">
-        <p class="alert" v-if="errors.has('skill')">{{ errors.first('skill') }}</p>
+        <ErrorMessage name="skill" />
       </form>
 
       <ul>
         <li v-for="(data, index) in skills" :key="index">{{ index }}. {{ data.skill }}</li>
       </ul>
-      
+
     </div>
   </div>
 </template>
@@ -21,12 +21,18 @@ export default {
   data() {
     return {
       msg: 'Yurr',
+      skill: '',
       skills: [
         { "skill": "Vue.js" },
         { "skill": "Frontend Developer" },
         { "skill": "Backend Developer" },
       ],
-      showAlert: true
+    }
+  },
+  methods: {
+    addSkill() {
+      this.skills.push({skill: this.skill})
+      this.skill = '';
     }
   }
 }
