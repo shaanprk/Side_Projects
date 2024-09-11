@@ -3,8 +3,17 @@
     <h1>{{ msg }}</h1>
     <div class="holder">
       <form @submit.prevent="addSkill">
-        <input type="text" placeholder="Enter a skill you have..." v-model="skill" v-validate="'min:5'" name="skill">
-        <ErrorMessage name="skill" />
+        <Field 
+          type="text" 
+          placeholder="Enter a skill you have..." 
+          v-model="skill" 
+          rules="min:5|required" 
+          name="skill" 
+        />
+        <ErrorMessage name="skill">
+          <p>Skill must be at least 5 characters long and required.</p>
+        </ErrorMessage>
+        <button type="submit">Add Skill</button>
       </form>
 
       <ul>
@@ -16,8 +25,25 @@
 </template>
 
 <script>
+import { Field, ErrorMessage, defineRule, useForm } from 'vee-validate';
+import { required, min } from '@vee-validate/rules';
+
+defineRule('required', required);
+defineRule('min', min);
+
 export default {
   name: 'HelloWorld',
+  components: {
+    Field,
+    ErrorMessage
+  },
+  setup() {
+    const { handleSubmit } = useForm();
+
+    return {
+      handleSubmit
+    }
+  },
   data() {
     return {
       msg: 'Yurr',
@@ -31,10 +57,12 @@ export default {
   },
   methods: {
     addSkill() {
-      this.skills.push({skill: this.skill})
-      this.skill = '';
+      // if (this.skill.length >= 5) {
+        this.skills.push({ skill: this.skill });
+        this.skill = '';
+      }
     }
-  }
+  // }
 }
 </script>
 
